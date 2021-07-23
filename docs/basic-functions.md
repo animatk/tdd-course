@@ -28,10 +28,12 @@ following the Red - Green - Refactor cycle **RGR** we going to create a test in 
 ```javascript
 import { getLetterCount } from '../LetterCount';
 
-test('getLetterCount if empty parameter', () => {
-    const expected = {};
-    const actual = getLetterCount('');
-    expect(actual).toEqual(expected);
+describe('getLetterCount', () => {
+    test('if empty parameter', () => {
+        const expected = {};
+        const actual = getLetterCount('');
+        expect(actual).toEqual(expected);
+    });
 });
 ```
 The test fails because the function `getLetterCount` doesn't exist, once we got a **Red** test in the cycle we can start to create production code in `LetterCount.js` to make the test past
@@ -40,3 +42,32 @@ The test fails because the function `getLetterCount` doesn't exist, once we got 
 export const getLetterCount = string => ({})
 ```
 Following the RGR cycle, we must do just enough code in our production function to make the test passed once the test is passed we should stop the development in the production code and start creating a new failing test.
+
+## Modifying existing functionatility
+
+In order to continue refactoring the function, we must create a new test in `LetterCount.test.js`
+
+```javascript
+test('return correct count for a word with only a letter of each letter', () => {
+    const expected = {c:1, a:1, t:1};
+    const actual = getLetterCount('cat');
+    expect(actual).toEqual(expected);
+});
+```
+
+once again the new test will fail and then we gonna refactor our production code `LetterCount.js` to make the new test passed
+
+```javascript
+export const getLetterCount = string => {
+    const letters = string.split('');
+    let letterCount = {};
+
+    letters.forEach(letter => {
+        if (!letterCount[letter]) {
+            letterCount[letter] = 1;
+        }
+    });
+
+    return letterCount;
+}
+```
